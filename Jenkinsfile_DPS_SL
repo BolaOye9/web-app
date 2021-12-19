@@ -1,0 +1,59 @@
+
+@Library('E-Commerce_Fintech Shared Libs')
+pipeline{
+  agent any  
+  tools {
+    maven "maven3.8.4"
+  }
+  triggers {
+  }
+  stages {
+    stage('1.CodeClone'){
+      steps{
+          sh "echo start of project"
+          git branch: 'stage', credentialsId: 'GitHubCredentials', url: 'https://github.com/LandmakTechnology/web-app'
+      }
+    } 
+    stage('2.mavenBuild'){
+      steps{
+      mvn_tie("Build")
+      } 
+    }
+    stage('3.CodeQuality') {
+              steps{
+      mvn_tie("SonarQube Report")
+      } 
+    }
+    stage('4.uploadToNexus'){
+      steps{
+       mvn_tie("Upload Into Nexus")
+      } 
+    }
+    stage('5.Deploy2Tomcat'){
+    steps{
+    sshagent(['9cf79723-6009-46dc-a47e-36b864e0c75a']) {
+    sh "scp -o StrictHostKeyChecking=no target/*war ec2-user@3.16.36.230:/opt/tomcat9/webapps/app"
+}
+    
+} 
+    }
+    }
+  post{
+    always {
+     mail bcc: 'abimbolaoyediran79@gmail.com', body: '''Build complete 
+
+Whitegate LLC''', cc: 'abimbolaoyediran79@gmail.com', from: '', replyTo: '', subject: 'Build done', to: 'abimbolaoyediran79@gmail.com'
+    } 
+    failure {
+    mail bcc: 'abimbolaoyediran79@gmail.com', body: '''Build complete 
+
+Whitegate LLC''', cc: 'abimbolaoyediran79@gmail.com', from: '', replyTo: '', subject: 'Build failed', to: 'abimbolaoyediran79@gmail.com'
+    }
+    success {
+    mail bcc: 'abimbolaoyediran79@gmail.com', body: '''Build complete 
+
+Whitegate LLC''', cc: 'abimbolaoyediran79@gmail.com', from: '', replyTo: '', subject: 'Build succeed', to: 'abimbolaoyediran79@gmail.com'
+    }
+  }  
+  }
+  
