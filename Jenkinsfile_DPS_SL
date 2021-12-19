@@ -1,5 +1,5 @@
 
-@Library('E-Commerce_Fintech Shared Libs') _
+@Library('E-Commerce_Fintech_Shared_Libs') _
 pipeline{
   agent any  
   tools {
