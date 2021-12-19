@@ -11,7 +11,7 @@ pipeline{
     stage('1.CodeClone'){
       steps{
           sh "echo start of project"
-          git branch: 'stage', credentialsId: 'GitHubCredentials', url: 'https://github.com/LandmakTechnology/web-app'
+          git branch: 'master', credentialsId: 'Github-Credentials', url: 'https://github.com/BolaOye9/maven-web-app'
       }
     } 
     stage('2.mavenBuild'){
@@ -55,6 +55,5 @@ Whitegate LLC''', cc: 'abimbolaoyediran79@gmail.com', from: '', replyTo: '', sub
 Whitegate LLC''', cc: 'abimbolaoyediran79@gmail.com', from: '', replyTo: '', subject: 'Build succeed', to: 'abimbolaoyediran79@gmail.com'
     }
   }  
-  }  
-  
+  }
   
